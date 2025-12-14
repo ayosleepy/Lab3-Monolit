@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Microblog{% endblock %}
+
+{% block content %}
+<h1>Последние посты</h1>
+
+{% if session.user_id %}
+<p><a href="/create_post">Создать пост</a></p>
+{% endif %}
+
+{% for post in posts %}
+<div style="border: 1px solid #ccc; padding: 15px; margin: 10px 0;">
+    <p><strong>{{ post['content'] }}</strong></p>
+    <small>
+        Автор: {{ post['user_id'] }} | 
+        Дата: {{ post['created_at'] }}
+    </small>
+</div>
+{% endfor %}
+{% endblock %}
