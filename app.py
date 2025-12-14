@@ -168,6 +168,26 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/create_post', methods=['GET', 'POST'])
+def create_post():
+    if 'user_id' not in session:
+        flash('Please login first')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        content = request.form['content']
+        if content.strip():
+            conn = get_db()
+            c = conn.cursor()
+            c.execute('INSERT INTO posts (content, user_id) VALUES (?, ?)',
+                      (content, session['user_id']))
+            conn.commit()
+            conn.close()
+            flash('Post created')
+            return redirect(url_for('index'))
+
+    return render_template('create_post.html')
+
 if __name__ == '__main__':
     init_db()
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
